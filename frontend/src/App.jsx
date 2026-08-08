@@ -58,7 +58,13 @@ function BrandMark() {
 
 function CitationMark({ id, onClick }) {
   return (
-    <button className="citation-mark" onClick={() => onClick(id)} type="button">
+    <button
+      aria-label={`查看 ${id} 证据摘录`}
+      className="citation-mark"
+      onClick={(event) => onClick(id, event.currentTarget)}
+      title={`查看 ${id} 证据摘录`}
+      type="button"
+    >
       [{id}]
     </button>
   );
@@ -281,6 +287,7 @@ export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showEvidence, setShowEvidence] = useState(true);
   const [selectedCitation, setSelectedCitation] = useState(null);
+  const [citationPosition, setCitationPosition] = useState(null);
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
   const [citations, setCitations] = useState([]);
@@ -349,13 +356,47 @@ export default function App() {
     setQuestion("");
     setError("");
     setSelectedCitation(null);
+    setCitationPosition(null);
     setActiveView("chat");
     setMobileOpen(false);
   }, []);
 
-  const newChat = () => { setMessages([]); setCitations([]); setRiskLevel("low"); setConversationId(null); setQuestion(""); setError(""); setSelectedCitation(null); setActiveView("chat"); setMobileOpen(false); };
+  const newChat = () => { setMessages([]); setCitations([]); setRiskLevel("low"); setConversationId(null); setQuestion(""); setError(""); setSelectedCitation(null); setCitationPosition(null); setActiveView("chat"); setMobileOpen(false); };
   const navigate = (view) => { setActiveView(view); setMobileOpen(false); };
   const activeCitationText = useMemo(() => citations.find((item) => item.citation_id === selectedCitation)?.snippet, [citations, selectedCitation]);
+  const closeCitation = useCallback(() => {
+    setSelectedCitation(null);
+    setCitationPosition(null);
+  }, []);
+  const selectCitation = useCallback((citationId, anchorElement = null) => {
+    let anchor = anchorElement;
+    if (!anchor && typeof document !== "undefined") {
+      anchor = [...document.querySelectorAll(".citation-mark")].find(
+        (element) => element.textContent.trim() === `[${citationId}]`,
+      );
+    }
+    if (anchor && typeof window !== "undefined") {
+      const rect = anchor.getBoundingClientRect();
+      const viewportPadding = 12;
+      const gap = 12;
+      const popoverWidth = Math.min(330, window.innerWidth - viewportPadding * 2);
+      const estimatedHeight = 240;
+      let left = rect.right + gap;
+      if (left + popoverWidth > window.innerWidth - viewportPadding) {
+        left = rect.left - popoverWidth - gap;
+      }
+      left = Math.max(viewportPadding, Math.min(left, window.innerWidth - popoverWidth - viewportPadding));
+      let top = rect.top;
+      if (top + estimatedHeight > window.innerHeight - viewportPadding) {
+        top = rect.bottom - estimatedHeight;
+      }
+      top = Math.max(viewportPadding, Math.min(top, window.innerHeight - estimatedHeight - viewportPadding));
+      setCitationPosition({ top, left });
+    } else {
+      setCitationPosition(null);
+    }
+    setSelectedCitation(citationId);
+  }, []);
 
   return (
     <div className="app-shell">
@@ -368,18 +409,18 @@ export default function App() {
             <main className="chat-column">
               <div className="chat-scroll">
                 <div className={`chat-inner ${messages.length === 0 ? "is-welcome" : ""}`}>
-                  {messages.length === 0 ? <Welcome onSuggestion={submitQuestion} /> : messages.map((message, index) => <MessageBubble key={`${message.role}-${index}`} message={message} onCitation={setSelectedCitation} />)}
+                  {messages.length === 0 ? <Welcome onSuggestion={submitQuestion} /> : messages.map((message, index) => <MessageBubble key={`${message.role}-${index}`} message={message} onCitation={selectCitation} />)}
                   {loading && <div className="typing-row"><div className="assistant-avatar"><BrandMark /></div><div className="typing-indicator"><span /><span /><span /><em>正在检索医学证据…</em></div></div>}
                   {error && <div className="error-notice"><Icon name="alert" size={16} />{error}</div>}
                 </div>
               </div>
               <Composer value={question} onChange={setQuestion} onSubmit={() => submitQuestion()} loading={loading} onAttach={() => setError("文档预览入口将在下一步接入；当前支持 API 上传预览。")} />
             </main>
-            {showEvidence && <EvidencePanel citations={citations} selectedCitation={selectedCitation} onClose={() => setShowEvidence(false)} onSelect={setSelectedCitation} riskLevel={riskLevel} />}
+            {showEvidence && <EvidencePanel citations={citations} selectedCitation={selectedCitation} onClose={() => setShowEvidence(false)} onSelect={selectCitation} riskLevel={riskLevel} />}
           </div>
         )}
       </div>
-      {selectedCitation && activeCitationText && <div className="citation-popover"><div><strong>{selectedCitation} · 证据摘录</strong><button className="icon-button" onClick={() => setSelectedCitation(null)} type="button"><Icon name="x" size={15} /></button></div><p>{activeCitationText}</p></div>}
+      {selectedCitation && activeCitationText && <div className="citation-popover" style={citationPosition || undefined}><div><strong>{selectedCitation} · 证据摘录</strong><button aria-label="关闭证据摘录" className="icon-button" onClick={closeCitation} type="button"><Icon name="x" size={15} /></button></div><p>{activeCitationText}</p></div>}
     </div>
   );
 }
