@@ -7,11 +7,26 @@ const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 const LOCAL_HISTORY_KEY = "medrag:xiaohe:conversation-history:v1";
 const MAX_LOCAL_CONVERSATIONS = 30;
 
-const suggestions = [
+const suggestionPool = [
   { title: "药物相互作用", text: "华法林和阿司匹林能否同时服用" },
   { title: "检查指标解读", text: "糖化血红蛋白的参考范围和影响因素是什么" },
   { title: "循证问答", text: "2型糖尿病合并肾功能异常如何评估用药" },
+  { title: "用药咨询", text: "扑热息痛和布洛芬可以一起使用吗" },
+  { title: "血糖管理", text: "空腹血糖和餐后血糖有什么区别" },
+  { title: "慢病管理", text: "高血压患者日常生活需要注意什么" },
+  { title: "症状判断", text: "咳嗽持续多久需要去医院检查" },
+  { title: "肾功能检查", text: "肌酐升高通常需要进一步做哪些检查" },
+  { title: "药品用法", text: "阿司匹林应该饭前还是饭后服用" },
 ];
+
+function pickRandomSuggestions() {
+  const shuffled = [...suggestionPool];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled.slice(0, 3);
+}
 
 function readLocalConversations() {
   if (typeof window === "undefined") return [];
@@ -226,6 +241,7 @@ function Composer({ value, onChange, onSubmit, loading, onAttach }) {
 }
 
 function Welcome({ onSuggestion }) {
+  const [suggestions] = useState(pickRandomSuggestions);
   return (
     <section className="welcome-state">
       <div className="welcome-icon"><BrandMark /></div>
