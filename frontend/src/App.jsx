@@ -437,7 +437,7 @@ export default function App() {
           </div>
         )}
       </div>
-      {selectedCitation && activeCitationText && <div className="citation-popover" style={citationPosition || undefined}><div><strong>{selectedCitation} · 证据摘录</strong><button aria-label="关闭证据摘录" className="icon-button" onClick={closeCitation} type="button"><Icon name="x" size={15} /></button></div><CitationExcerpt text={activeCitationText} /></div>}
+      {selectedCitation && activeCitationText && <div className="citation-popover" style={citationPosition || undefined}><div className="citation-popover-header"><strong>{selectedCitation} · 证据摘录</strong><button aria-label="关闭证据摘录" className="icon-button" onClick={closeCitation} type="button"><Icon name="x" size={15} /></button></div><CitationExcerpt text={activeCitationText} /></div>}
     </div>
   );
 }
