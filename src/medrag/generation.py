@@ -41,7 +41,7 @@ class TemplateGenerator:
     @staticmethod
     def _citation(result: RetrievalResult, index: int) -> Citation:
         chunk = result.chunk
-        snippet = " ".join(chunk.content.replace("\n", " ").split())[:180]
+        snippet = TemplateGenerator._markdown_excerpt(chunk.content, max_chars=360)
         return Citation(
             citation_id=f"C{index}",
             source_id=chunk.source_id,

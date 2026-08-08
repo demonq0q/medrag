@@ -30,3 +30,6 @@ def test_evidence_answer_preserves_markdown_table_structure() -> None:
     assert "### 证据摘录 [C1]" in answer
     assert "| 项目 | 范围 |\n| --- | --- |" in answer
     assert "\n| 空腹血糖 | 3.9-6.1 mmol/L |" in answer
+
+    citation_snippet = TemplateGenerator._citation(result, 1).snippet
+    assert "\n| 项目 | 范围 |" in citation_snippet

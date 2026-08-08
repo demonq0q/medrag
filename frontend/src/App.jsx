@@ -105,6 +105,23 @@ function AnswerText({ text, onCitation }) {
   );
 }
 
+function CitationExcerpt({ text }) {
+  const components = {
+    p: ({ children }) => <p>{children}</p>,
+    ul: ({ children }) => <ul>{children}</ul>,
+    ol: ({ children }) => <ol>{children}</ol>,
+    li: ({ children }) => <li>{children}</li>,
+    table: ({ children }) => <div className="citation-table-wrap"><table>{children}</table></div>,
+    thead: ({ children }) => <thead>{children}</thead>,
+    tbody: ({ children }) => <tbody>{children}</tbody>,
+    tr: ({ children }) => <tr>{children}</tr>,
+    th: ({ children }) => <th>{children}</th>,
+    td: ({ children }) => <td>{children}</td>,
+  };
+
+  return <div className="citation-excerpt"><ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>{text}</ReactMarkdown></div>;
+}
+
 function Sidebar({ collapsed, mobileOpen, activeView, onNavigate, onNewChat, onOpenConversation, conversations, onToggle }) {
   const primary = [
     ["chat", "问答", "message"],
@@ -420,7 +437,7 @@ export default function App() {
           </div>
         )}
       </div>
-      {selectedCitation && activeCitationText && <div className="citation-popover" style={citationPosition || undefined}><div><strong>{selectedCitation} · 证据摘录</strong><button aria-label="关闭证据摘录" className="icon-button" onClick={closeCitation} type="button"><Icon name="x" size={15} /></button></div><p>{activeCitationText}</p></div>}
+      {selectedCitation && activeCitationText && <div className="citation-popover" style={citationPosition || undefined}><div><strong>{selectedCitation} · 证据摘录</strong><button aria-label="关闭证据摘录" className="icon-button" onClick={closeCitation} type="button"><Icon name="x" size={15} /></button></div><CitationExcerpt text={activeCitationText} /></div>}
     </div>
   );
 }
