@@ -51,7 +51,9 @@ async def lifespan(app: FastAPI):
     normalizer = MedicalTermNormalizer(settings.data_dir)
     app.state.settings = settings
     app.state.store = store
-    app.state.pipeline = MedicalRAGPipeline(HybridRetriever(store, normalizer))
+    app.state.pipeline = MedicalRAGPipeline(
+        HybridRetriever(store, normalizer, settings.retrieval_relevance_threshold)
+    )
     yield
 
 

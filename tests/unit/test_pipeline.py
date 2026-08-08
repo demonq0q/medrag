@@ -32,3 +32,40 @@ def test_unknown_query_fails_closed(tmp_path: Path) -> None:
     response = make_pipeline(tmp_path).invoke("某个不存在的药物应该服用多少毫克")
     assert response.safety_status in {"blocked_no_evidence", "blocked_unsupported_dose"}
     assert "不会据此猜测" in response.answer
+
+
+def test_retrieval_filters_low_relevance_chunks(tmp_path: Path) -> None:
+    store = SQLiteStore(tmp_path / "medrag.sqlite3")
+    KnowledgeBuilder(Path("med-rag-data"), store).build()
+    retriever = HybridRetriever(store, MedicalTermNormalizer(Path("med-rag-data")))
+
+    bundle = retriever.retrieve("感冒怎么办", top_k=8)
+    source_ids = {result.chunk.source_id for result in bundle.results}
+
+    assert {"faq_025", "faq_009"}.issubset(source_ids)
+    assert source_ids <= {"faq_025", "faq_009"}
+    assert all(result.relevance >= retriever.relevance_threshold for result in bundle.results)
+    assert bundle.trace["filtered_candidate_count"] < bundle.trace["candidate_count"]
+
+    unknown = retriever.retrieve("不存在的银河系外药物应该怎么服用", top_k=8)
+    assert unknown.results == []
+
+
+def test_multi_drug_retrieval_requires_pair_coverage(tmp_path: Path) -> None:
+    store = SQLiteStore(tmp_path / "medrag.sqlite3")
+    KnowledgeBuilder(Path("med-rag-data"), store).build()
+    retriever = HybridRetriever(store, MedicalTermNormalizer(Path("med-rag-data")))
+
+    bundle = retriever.retrieve("华法林和阿司匹林能否同时服用", top_k=8)
+    source_ids = {result.chunk.source_id for result in bundle.results}
+
+    assert {"DDI_001", "faq_005"}.issubset(source_ids)
+    assert "faq_009" not in source_ids
+    assert all(
+        "interaction" in result.routes
+        or all(
+            drug in f"{result.chunk.title} {result.chunk.content}"
+            for drug in ("华法林", "阿司匹林")
+        )
+        for result in bundle.results
+    )

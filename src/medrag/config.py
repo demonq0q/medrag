@@ -27,6 +27,7 @@ class Settings:
     llm_api_key: str | None
     llm_base_url: str | None
     llm_model: str | None
+    retrieval_relevance_threshold: float
     api_key: str | None
     api_host: str
     api_port: int
@@ -43,6 +44,13 @@ class Settings:
             artifact_dir = (root / artifact_dir).resolve()
         if not db_path.is_absolute():
             db_path = (root / db_path).resolve()
+        try:
+            retrieval_relevance_threshold = float(
+                os.getenv("MEDRAG_RETRIEVAL_RELEVANCE_THRESHOLD", "0.40")
+            )
+        except ValueError:
+            retrieval_relevance_threshold = 0.40
+        retrieval_relevance_threshold = max(0.0, min(1.0, retrieval_relevance_threshold))
         return cls(
             project_root=root,
             data_dir=data_dir,
@@ -54,6 +62,7 @@ class Settings:
             llm_api_key=os.getenv("MEDRAG_LLM_API_KEY") or None,
             llm_base_url=os.getenv("MEDRAG_LLM_BASE_URL") or None,
             llm_model=os.getenv("MEDRAG_LLM_MODEL") or None,
+            retrieval_relevance_threshold=retrieval_relevance_threshold,
             api_key=os.getenv("MEDRAG_API_KEY") or None,
             api_host=os.getenv("MEDRAG_API_HOST", "0.0.0.0"),
             api_port=int(os.getenv("MEDRAG_API_PORT", "8000")),

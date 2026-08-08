@@ -55,6 +55,7 @@ class RetrievalResult:
     chunk: ChunkRecord
     score: float
     routes: list[str] = field(default_factory=list)
+    relevance: float = 0.0
 
 
 class QueryRequest(BaseModel):
