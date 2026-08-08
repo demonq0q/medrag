@@ -93,8 +93,17 @@ class TemplateGenerator:
     ) -> str:
         lines = ["## 基于循证资料的回答", "", f"针对“{question}”，当前检索到以下相关资料：", ""]
         for result, citation in zip(results[:4], citations[:4], strict=False):
-            content = " ".join(result.chunk.content.replace("\n", " ").split())[:420]
-            lines.append(f"- {content} [{citation.citation_id}]")
+            # Keep the source's Markdown line structure. Flattening it here turns
+            # GFM tables into a long pipe-delimited paragraph in the UI.
+            content = TemplateGenerator._markdown_excerpt(result.chunk.content)
+            lines.extend(
+                [
+                    f"### 证据摘录 [{citation.citation_id}]",
+                    "",
+                    content,
+                    "",
+                ]
+            )
         lines.extend(
             [
                 "",
@@ -102,6 +111,24 @@ class TemplateGenerator:
             ]
         )
         return "\n".join(lines)
+
+    @staticmethod
+    def _markdown_excerpt(content: str, max_chars: int = 760) -> str:
+        """Trim an evidence excerpt without destroying its Markdown blocks."""
+        normalized = content.replace("\r\n", "\n").replace("\r", "\n").strip()
+        if len(normalized) <= max_chars:
+            return normalized
+
+        kept: list[str] = []
+        length = 0
+        for line in normalized.splitlines():
+            next_length = length + len(line) + (1 if kept else 0)
+            if next_length > max_chars:
+                break
+            kept.append(line)
+            length = next_length
+        excerpt = "\n".join(kept).rstrip()
+        return f"{excerpt}\n\n…（证据摘录已截断）"
 
     @staticmethod
     def _confidence(bundle: RetrievalBundle) -> float:
