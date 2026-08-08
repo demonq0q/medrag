@@ -27,6 +27,7 @@ class Settings:
     llm_api_key: str | None
     llm_base_url: str | None
     llm_model: str | None
+    api_key: str | None
     api_host: str
     api_port: int
 
@@ -53,6 +54,7 @@ class Settings:
             llm_api_key=os.getenv("MEDRAG_LLM_API_KEY") or None,
             llm_base_url=os.getenv("MEDRAG_LLM_BASE_URL") or None,
             llm_model=os.getenv("MEDRAG_LLM_MODEL") or None,
+            api_key=os.getenv("MEDRAG_API_KEY") or None,
             api_host=os.getenv("MEDRAG_API_HOST", "0.0.0.0"),
             api_port=int(os.getenv("MEDRAG_API_PORT", "8000")),
         )

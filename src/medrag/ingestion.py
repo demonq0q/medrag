@@ -434,13 +434,31 @@ class KnowledgeBuilder:
                 source = relation.get("source", "")
                 target = relation.get("target", "")
                 relation_hash = hashlib.sha1(f"{source}:{target}".encode()).hexdigest()[:8]
+                relation_id = f"relation_{index}_{relation_hash}"
+                chunk_id = f"{relation_id}_1"
+                self._append_text_chunks(
+                    source_id=relation_id,
+                    source=relative,
+                    title=f"{source}—{relation.get('type', 'RELATED_TO')}—{target}",
+                    text=(
+                        f"知识图谱关系：{source} — "
+                        f"{relation.get('type', 'RELATED_TO')} — {target}\n"
+                        f"证据说明：{relation.get('evidence', '')}"
+                    ),
+                    doc_type="知识图谱",
+                    medical_field="医学知识图谱",
+                    evidence_level="B",
+                    credibility_score=0.88,
+                    metadata={"relation_id": relation_id},
+                )
                 self.graph_relations.append(
                     {
-                        "id": f"relation_{index}_{relation_hash}",
+                        "id": relation_id,
                         "source": source,
                         "target": target,
                         "type": relation.get("type", "RELATED_TO"),
                         "evidence": relation.get("evidence", ""),
+                        "chunk_id": chunk_id,
                     }
                 )
             return

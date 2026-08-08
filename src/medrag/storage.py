@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS graph_relations (
     source_name TEXT NOT NULL,
     target_name TEXT NOT NULL,
     relation_type TEXT NOT NULL,
-    evidence TEXT NOT NULL DEFAULT ''
+    evidence TEXT NOT NULL DEFAULT '',
+    chunk_id TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_graph_relations_source ON graph_relations(source_name);
 CREATE INDEX IF NOT EXISTS idx_graph_relations_target ON graph_relations(target_name);
@@ -125,6 +126,14 @@ class SQLiteStore:
     def initialize(self) -> None:
         with self.connect() as connection:
             connection.executescript(SCHEMA)
+            columns = {
+                row[1]
+                for row in connection.execute("PRAGMA table_info(graph_relations)").fetchall()
+            }
+            if "chunk_id" not in columns:
+                connection.execute(
+                    "ALTER TABLE graph_relations ADD COLUMN chunk_id TEXT NOT NULL DEFAULT ''"
+                )
 
     def reset_knowledge(self) -> None:
         with self.connect() as connection:
@@ -243,8 +252,8 @@ class SQLiteStore:
             connection.executemany(
                 """
                 INSERT INTO graph_relations
-                (relation_id, source_name, target_name, relation_type, evidence)
-                VALUES (?, ?, ?, ?, ?)
+                (relation_id, source_name, target_name, relation_type, evidence, chunk_id)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
                 [
                     (
@@ -253,6 +262,7 @@ class SQLiteStore:
                         item["target"],
                         item["type"],
                         item.get("evidence", ""),
+                        item.get("chunk_id", ""),
                     )
                     for item in relation_records
                 ],
@@ -387,7 +397,7 @@ class SQLiteStore:
             for index, first in enumerate(drugs):
                 for second in drugs[index + 1 :]:
                     clauses.append("(drug_a = ? AND drug_b = ?) OR (drug_a = ? AND drug_b = ?)")
-                    params.extend([first, second, first, second])
+                    params.extend([first, second, second, first])
         else:
             clauses.append("drug_a = ? OR drug_b = ?")
             params.extend([drugs[0], drugs[0]])
