@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Icon } from "./icons";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "/api";
@@ -63,26 +65,36 @@ function CitationMark({ id, onClick }) {
 }
 
 function AnswerText({ text, onCitation }) {
-  const renderInline = (value, keyPrefix) => value.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
-    const match = part.match(/^\*\*(.+)\*\*$/);
-    return match ? <strong key={`${keyPrefix}-bold-${index}`}>{match[1]}</strong> : <span key={`${keyPrefix}-text-${index}`}>{part}</span>;
-  });
+  const components = {
+    h1: ({ children }) => <h2 className="answer-heading answer-heading-primary">{children}</h2>,
+    h2: ({ children }) => <h2 className="answer-heading">{children}</h2>,
+    h3: ({ children }) => <h3 className="answer-subheading">{children}</h3>,
+    p: ({ children }) => <p className="answer-paragraph">{children}</p>,
+    ul: ({ children }) => <ul className="answer-list">{children}</ul>,
+    ol: ({ children }) => <ol className="answer-list answer-ordered-list">{children}</ol>,
+    li: ({ children }) => <li>{children}</li>,
+    blockquote: ({ children }) => <blockquote className="answer-quote">{children}</blockquote>,
+    table: ({ children }) => <div className="answer-table-wrap"><table>{children}</table></div>,
+    thead: ({ children }) => <thead>{children}</thead>,
+    tbody: ({ children }) => <tbody>{children}</tbody>,
+    tr: ({ children }) => <tr>{children}</tr>,
+    th: ({ children }) => <th>{children}</th>,
+    td: ({ children }) => <td>{children}</td>,
+    hr: () => <hr className="answer-divider" />,
+    a: ({ href, children }) => {
+      const citation = href?.match(/^#citation-C(\d+)$/);
+      if (citation) return <CitationMark id={`C${citation[1]}`} onClick={onCitation} />;
+      return <a href={href} target="_blank" rel="noreferrer">{children}</a>;
+    },
+    pre: ({ children }) => <pre className="answer-code-block">{children}</pre>,
+    code: ({ children, className }) => <code className={className || "answer-inline-code"}>{children}</code>,
+  };
+
   return (
     <div className="answer-text">
-      {text.split("\n").map((line, lineIndex) => {
-        const parts = line.split(/(\[C\d+\])/g);
-        const isHeading = line.startsWith("## ");
-        const isBullet = line.startsWith("- ");
-        return (
-          <div className={isHeading ? "answer-heading" : isBullet ? "answer-line answer-bullet" : "answer-line"} key={`${lineIndex}-${line}`}>
-            {parts.map((part, index) => {
-              const match = part.match(/^\[C(\d+)\]$/);
-              if (match) return <CitationMark id={`C${match[1]}`} key={`${part}-${index}`} onClick={onCitation} />;
-              return <span key={`${part}-${index}`}>{renderInline(isHeading && index === 0 ? part.slice(3) : part, `${lineIndex}-${index}`)}</span>;
-            })}
-          </div>
-        );
-      })}
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {text.replace(/\[C(\d+)\]/g, "[C$1](#citation-C$1)")}
+      </ReactMarkdown>
     </div>
   );
 }

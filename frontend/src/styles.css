@@ -101,10 +101,30 @@ button { border: 0; cursor: pointer; }
 .user-message p { margin: 0; }
 .assistant-message { min-width: 0; padding: 19px 21px 13px; border: 1px solid var(--border); border-radius: 4px 14px 14px 14px; background: #fff; box-shadow: 0 5px 20px rgba(22,45,53,.035); }
 .answer-text { color: #35434b; font-size: 14px; line-height: 1.8; }
-.answer-line { min-height: 1.8em; white-space: pre-wrap; }
-.answer-line:empty { min-height: .7em; }
-.answer-heading { margin: 0 0 4px; color: #26373e; font-size: 17px; font-weight: 750; line-height: 1.45; }
-.answer-bullet { padding-left: 5px; }
+.answer-text > :first-child { margin-top: 0; }
+.answer-text > :last-child { margin-bottom: 0; }
+.answer-paragraph { margin: 0 0 13px; white-space: pre-wrap; }
+.answer-heading { margin: 21px 0 8px; color: #26373e; font-size: 17px; font-weight: 750; line-height: 1.45; }
+.answer-heading-primary { margin-top: 0; font-size: 18px; }
+.answer-subheading { margin: 17px 0 7px; color: #34474f; font-size: 15px; font-weight: 750; line-height: 1.5; }
+.answer-list { display: grid; gap: 6px; margin: 0 0 14px; padding-left: 23px; }
+.answer-list li { padding-left: 3px; }
+.answer-list li::marker { color: var(--teal); font-weight: 700; }
+.answer-ordered-list li::marker { color: var(--teal-dark); }
+.answer-quote { margin: 15px 0; padding: 10px 13px; color: #667980; border-left: 3px solid #9ed9da; border-radius: 0 8px 8px 0; background: #f5fbfb; font-size: 13px; }
+.answer-quote p { margin: 0; }
+.answer-table-wrap { max-width: 100%; margin: 15px 0; overflow-x: auto; border: 1px solid var(--border); border-radius: 9px; }
+.answer-table-wrap table { width: 100%; min-width: 460px; border-collapse: collapse; font-size: 12px; line-height: 1.55; }
+.answer-table-wrap th { color: #37545a; background: #f1f8f8; font-weight: 750; text-align: left; }
+.answer-table-wrap th, .answer-table-wrap td { padding: 9px 11px; border-bottom: 1px solid #edf1f2; vertical-align: top; }
+.answer-table-wrap tr:last-child td { border-bottom: 0; }
+.answer-table-wrap tbody tr:nth-child(even) { background: #fbfcfc; }
+.answer-text a { color: var(--teal-dark); text-decoration: underline; text-decoration-color: #b6dddd; text-underline-offset: 2px; }
+.answer-text a:hover { color: var(--teal); text-decoration-color: var(--teal); }
+.answer-divider { margin: 18px 0; border: 0; border-top: 1px solid var(--border); }
+.answer-code-block { max-width: 100%; margin: 13px 0; overflow-x: auto; padding: 13px 15px; color: #e6f5f4; border-radius: 9px; background: #23383e; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; line-height: 1.65; }
+.answer-code-block code { color: inherit; }
+.answer-inline-code { padding: 2px 5px; color: #2f6669; border: 1px solid #d8eeee; border-radius: 4px; background: #f0f9f9; font-family: "SFMono-Regular", Consolas, monospace; font-size: .9em; }
 .citation-mark { display: inline; padding: 0 2px; color: var(--teal-dark); background: transparent; font-size: .86em; font-weight: 750; vertical-align: baseline; }
 .citation-mark:hover { text-decoration: underline; }
 .message-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 17px; padding-top: 11px; border-top: 1px solid #f0f2f3; }
@@ -144,4 +164,3 @@ button { border: 0; cursor: pointer; }
 @media (max-width: 1120px) { .evidence-panel { width: 300px; flex-basis: 300px; }.topbar-action span { display: none; }.topbar-action { padding: 8px; } }
 @media (max-width: 900px) { .evidence-panel { display: none; }.suggestion-grid { grid-template-columns: 1fr; max-width: 470px; margin-inline: auto; }.suggestion-card { min-height: 90px; }.evidence-toggle { display: flex; }.chat-inner { width: min(760px, calc(100% - 36px)); }.composer-dock { padding-inline: 18px; }.metric-grid { grid-template-columns: repeat(2, 1fr); }.capability-list { grid-template-columns: 1fr; }.evaluation-layout { grid-template-columns: 1fr; }.citation-popover { right: 18px; } }
 @media (max-width: 680px) { .sidebar { position: fixed; left: 0; top: 0; transform: translateX(-102%); box-shadow: 10px 0 30px rgba(20,40,48,.12); }.sidebar.is-mobile-open { transform: translateX(0); }.sidebar.is-collapsed { width: 268px; flex-basis: 268px; padding-inline: 14px; }.sidebar.is-collapsed .brand-lockup > div, .sidebar.is-collapsed .new-chat-button span, .sidebar.is-collapsed .nav-item span, .sidebar.is-collapsed .sidebar-bottom .profile-copy, .sidebar.is-collapsed .sidebar-bottom .workspace-status, .sidebar.is-collapsed .profile-chevron { display: block; }.sidebar.is-collapsed .new-chat-button { width: auto; margin-inline: 0; }.sidebar.is-collapsed .nav-item, .sidebar.is-collapsed .profile-button { justify-content: flex-start; padding-inline: 12px; }.mobile-overlay { position: fixed; inset: 0; z-index: 15; display: block; background: rgba(24,44,50,.22); }.topbar { height: 57px; flex-basis: 57px; padding: 0 13px; gap: 9px; }.mobile-menu-button { display: grid; }.topbar-actions { gap: 0; }.topbar-action:nth-child(-n+2) { display: none; }.mode-selector { font-size: 12px; }.chat-inner { width: calc(100% - 26px); padding-top: 27px; }.chat-inner.is-welcome { padding-bottom: 100px; }.welcome-state h1 { font-size: 25px; }.welcome-state > p { font-size: 12px; }.suggestion-grid { margin-top: 25px; }.suggestion-card { min-height: 83px; padding: 13px; }.message-row { gap: 8px; margin-bottom: 22px; }.assistant-avatar { width: 27px; height: 27px; flex-basis: 27px; }.assistant-avatar .brand-mark { width: 24px; height: 24px; }.user-avatar { width: 26px; height: 26px; flex-basis: 26px; }.message-content { max-width: calc(100% - 35px); }.assistant-message { padding: 15px 14px 10px; }.answer-text, .user-message { font-size: 13px; }.user-message { padding: 10px 12px; }.message-meta { align-items: flex-start; flex-direction: column; gap: 7px; }.composer-dock { padding: 0 10px 10px; }.composer { padding: 9px 9px 8px; }.composer-mode { display: none; }.composer-disclaimer { font-size: 9px; line-height: 1.35; }.content-view { padding: 27px 16px; }.view-heading { align-items: flex-start; flex-direction: column; margin-bottom: 22px; }.view-heading h1 { font-size: 26px; }.metric-card { padding: 13px; }.metric-card strong { font-size: 23px; }.evaluation-layout { gap: 10px; }.knowledge-section, .evaluation-card { padding: 15px; } }
-
