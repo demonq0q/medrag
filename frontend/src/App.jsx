@@ -268,7 +268,7 @@ function EvidencePanel({ citations, selectedCitation, onClose, onSelect, riskLev
       <div className="evidence-summary"><div className="summary-heading"><span>证据等级分布</span><span>共 {citations.length} 篇</span></div><div className="evidence-distribution"><strong>{citations.filter((item) => item.evidence_level === "A").length}<small>A 级</small></strong><strong>{citations.filter((item) => item.evidence_level === "B").length}<small>B 级</small></strong><strong>{citations.filter((item) => item.evidence_level === "C").length}<small>C 级</small></strong><strong>{citations.filter((item) => !["A", "B", "C"].includes(item.evidence_level)).length}<small>其他</small></strong></div></div>
       <div className="citation-list">
         {citations.length === 0 ? <div className="empty-evidence"><Icon name="book" size={25} /><p>完成一次问答后，这里会显示可核验的来源。</p></div> : citations.map((citation, index) => (
-          <button className={`citation-card ${selectedCitation === citation.citation_id ? "selected" : ""}`} key={citation.citation_id} onClick={() => onSelect(citation.citation_id)} type="button">
+          <button className={`citation-card ${selectedCitation === citation.citation_id ? "selected" : ""}`} key={citation.citation_id} onClick={(event) => onSelect(citation.citation_id, event.currentTarget)} type="button">
             <div className="citation-number">{index + 1}</div><div className="citation-copy"><strong>{citation.source.split("/").pop()}</strong><span>{citation.doc_type}{citation.section ? ` · ${citation.section}` : ""}</span><small>{citation.evidence_level ? `${citation.evidence_level} 级证据` : "知识库来源"}{citation.page_number ? ` · 第 ${citation.page_number} 页` : ""}</small></div>
           </button>
         ))}
@@ -414,6 +414,22 @@ export default function App() {
     }
     setSelectedCitation(citationId);
   }, []);
+
+  useEffect(() => {
+    if (!selectedCitation) return undefined;
+    const dismiss = () => closeCitation();
+    const passive = { passive: true };
+    document.addEventListener("scroll", dismiss, true);
+    window.addEventListener("wheel", dismiss, passive);
+    window.addEventListener("touchmove", dismiss, passive);
+    window.addEventListener("resize", dismiss, passive);
+    return () => {
+      document.removeEventListener("scroll", dismiss, true);
+      window.removeEventListener("wheel", dismiss, passive);
+      window.removeEventListener("touchmove", dismiss, passive);
+      window.removeEventListener("resize", dismiss, passive);
+    };
+  }, [closeCitation, selectedCitation]);
 
   return (
     <div className="app-shell">
