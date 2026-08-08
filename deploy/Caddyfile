@@ -1,0 +1,5 @@
+medrag.986889.xyz {
+    encode gzip zstd
+    reverse_proxy web:80
+}
+

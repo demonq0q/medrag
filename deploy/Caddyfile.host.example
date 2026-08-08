@@ -1,0 +1,8 @@
+# Copy the managed block into the host Caddyfile through
+# scripts/configure_caddy_host.sh. The port is discovered after Compose
+# publishes the web service on a random localhost port.
+medrag.986889.xyz {
+    encode gzip zstd
+    reverse_proxy 127.0.0.1:__MEDRAG_WEB_PORT__
+}
+
