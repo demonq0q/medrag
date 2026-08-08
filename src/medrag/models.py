@@ -74,6 +74,8 @@ class Citation(BaseModel):
     doc_type: str
     credibility_score: float = 0.0
     snippet: str = ""
+    routes: list[str] = Field(default_factory=list)
+    relevance: float = 0.0
 
 
 class QueryResponse(BaseModel):

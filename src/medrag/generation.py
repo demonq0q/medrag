@@ -52,6 +52,8 @@ class TemplateGenerator:
             doc_type=chunk.doc_type,
             credibility_score=chunk.credibility_score,
             snippet=snippet,
+            routes=list(result.routes),
+            relevance=result.relevance,
         )
 
     @staticmethod

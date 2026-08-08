@@ -77,6 +77,12 @@ class HybridRetriever:
         "interaction": 1.45,
         "lab": 1.30,
     }
+    DOC_TYPE_BOOSTS = {
+        "FAQ": 0.98,
+        "临床指南": 1.12,
+        "药品说明书": 1.08,
+        "药物相互作用": 1.10,
+    }
 
     def __init__(
         self,
@@ -173,18 +179,14 @@ class HybridRetriever:
             and self._passes_entity_gate(result, drug_names, interactions)
         ]
 
-        ranked = sorted(
-            filtered,
-            key=lambda result: result.score + result.chunk.credibility_score * 0.12,
-            reverse=True,
-        )
+        ranked = sorted(filtered, key=self._fusion_score, reverse=True)
         ranked = self._deduplicate_sources(ranked)[:top_k]
         if interactions:
             interaction_ids = {item["chunk_id"] for item in interactions}
             ranked.sort(
                 key=lambda result: (
                     0 if result.chunk.chunk_id in interaction_ids else 1,
-                    -result.score,
+                    -self._fusion_score(result),
                 )
             )
         elif labs:
@@ -192,22 +194,45 @@ class HybridRetriever:
             ranked.sort(
                 key=lambda result: (
                     0 if result.chunk.chunk_id in lab_ids else 1,
-                    -result.score,
+                    -self._fusion_score(result),
                 )
             )
+        route_counts = {
+            "bm25": len(lexical),
+            "faq": len(faq),
+            "interaction": len(interactions),
+            "graph": len(graph_relations),
+            "lab": len(labs),
+        }
         trace = {
             "terms": terms[:32],
-            "routes": {
-                "bm25": len(lexical),
-                "faq": len(faq),
-                "interaction": len(interactions),
-                "graph": len(graph_relations),
-                "lab": len(labs),
+            "routes": route_counts,
+            "stages": {
+                "recall": route_counts,
+                "filter": {
+                    "input_candidates": len(candidates),
+                    "accepted_candidates": len(filtered),
+                    "relevance_threshold": self.relevance_threshold,
+                },
+                "fusion": {
+                    "strategy": "weighted_rrf_with_source_metadata",
+                    "deduplicated_sources": len(ranked),
+                    "returned_count": len(ranked),
+                },
             },
             "candidate_count": len(candidates),
             "filtered_candidate_count": len(filtered),
             "relevance_threshold": self.relevance_threshold,
             "returned_count": len(ranked),
+            "returned": [
+                {
+                    "source_id": result.chunk.source_id,
+                    "routes": list(result.routes),
+                    "relevance": result.relevance,
+                    "fusion_score": round(self._fusion_score(result), 6),
+                }
+                for result in ranked
+            ],
         }
         return RetrievalBundle(
             original_query=question,
@@ -222,6 +247,15 @@ class HybridRetriever:
 
     def _rrf(self, route: str, rank: int) -> float:
         return self.ROUTE_WEIGHTS[route] / (60.0 + rank)
+
+    def _fusion_score(self, result: RetrievalResult) -> float:
+        """Apply source metadata after weighted RRF, without exposing tiers to users."""
+        chunk = result.chunk
+        boost = 1.0 + max(0.0, min(1.0, chunk.credibility_score)) * 0.18
+        boost *= self.DOC_TYPE_BOOSTS.get(chunk.doc_type, 1.0)
+        if "指南" in chunk.title or "指南" in chunk.source:
+            boost *= 1.04
+        return result.score * boost + result.relevance * 0.04
 
     def _relevance_terms(self, terms: list[str]) -> list[str]:
         return list(
@@ -277,4 +311,6 @@ class HybridRetriever:
             current.routes = list(dict.fromkeys(current.routes + result.routes))
             current.score = max(current.score, result.score)
             current.relevance = max(current.relevance, result.relevance)
-        return sorted(source_best.values(), key=lambda item: item.score, reverse=True)
+        # The input is already ordered by fused score. Keeping insertion order
+        # preserves the best source-level result after de-duplication.
+        return list(source_best.values())

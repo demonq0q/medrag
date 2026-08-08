@@ -277,14 +277,16 @@ function MessageBubble({ message, onCitation }) {
 }
 
 function EvidencePanel({ citations, selectedCitation, onClose, onSelect, riskLevel }) {
+  const routeLabels = { bm25: "关键词", faq: "FAQ", interaction: "相互作用", graph: "知识图谱", lab: "检验指标" };
+  const formatRoutes = (routes) => (routes || []).map((route) => routeLabels[route] || route).join(" · ");
   return (
     <aside className="evidence-panel">
       <div className="evidence-header"><div><span className="eyebrow">答案溯源</span><h2>引用来源</h2></div><button className="icon-button" onClick={onClose} aria-label="关闭引用来源" type="button"><Icon name="x" size={18} /></button></div>
-      <div className="evidence-summary"><div className="summary-heading"><span>证据等级分布</span><span>共 {citations.length} 篇</span></div><div className="evidence-distribution"><strong>{citations.filter((item) => item.evidence_level === "A").length}<small>A 级</small></strong><strong>{citations.filter((item) => item.evidence_level === "B").length}<small>B 级</small></strong><strong>{citations.filter((item) => item.evidence_level === "C").length}<small>C 级</small></strong><strong>{citations.filter((item) => !["A", "B", "C"].includes(item.evidence_level)).length}<small>其他</small></strong></div></div>
+      <div className="evidence-summary"><div className="summary-heading"><span>相关来源</span><span>共 {citations.length} 篇</span></div><p className="summary-note">按问题相关性与检索路径整理</p></div>
       <div className="citation-list">
         {citations.length === 0 ? <div className="empty-evidence"><Icon name="book" size={25} /><p>完成一次问答后，这里会显示可核验的来源。</p></div> : citations.map((citation, index) => (
           <button className={`citation-card ${selectedCitation === citation.citation_id ? "selected" : ""}`} key={citation.citation_id} onClick={(event) => onSelect(citation.citation_id, event.currentTarget)} type="button">
-            <div className="citation-number">{index + 1}</div><div className="citation-copy"><strong>{citation.source.split("/").pop()}</strong><span>{citation.doc_type}{citation.section ? ` · ${citation.section}` : ""}</span><small>{citation.evidence_level ? `${citation.evidence_level} 级证据` : "知识库来源"}{citation.page_number ? ` · 第 ${citation.page_number} 页` : ""}</small></div>
+            <div className="citation-number">{index + 1}</div><div className="citation-copy"><strong>{citation.source.split("/").pop()}</strong><span>{citation.doc_type}{citation.section ? ` · ${citation.section}` : ""}</span><small>{formatRoutes(citation.routes) || "知识库来源"}{citation.page_number ? ` · 第 ${citation.page_number} 页` : ""}</small></div>
           </button>
         ))}
       </div>

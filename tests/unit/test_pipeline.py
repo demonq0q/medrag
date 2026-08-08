@@ -46,6 +46,8 @@ def test_retrieval_filters_low_relevance_chunks(tmp_path: Path) -> None:
     assert source_ids <= {"faq_025", "faq_009"}
     assert all(result.relevance >= retriever.relevance_threshold for result in bundle.results)
     assert bundle.trace["filtered_candidate_count"] < bundle.trace["candidate_count"]
+    assert bundle.trace["stages"]["fusion"]["strategy"] == "weighted_rrf_with_source_metadata"
+    assert bundle.trace["returned"]
 
     unknown = retriever.retrieve("不存在的银河系外药物应该怎么服用", top_k=8)
     assert unknown.results == []
@@ -69,3 +71,8 @@ def test_multi_drug_retrieval_requires_pair_coverage(tmp_path: Path) -> None:
         )
         for result in bundle.results
     )
+    assert response_routes(bundle) == {"interaction", "faq", "bm25"}
+
+
+def response_routes(bundle):
+    return {route for result in bundle.results for route in result.routes}
