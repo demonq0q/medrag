@@ -6,9 +6,8 @@ import json
 import uuid
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
-from pathlib import Path
 
-from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile, status
+from fastapi import Depends, FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import __version__
@@ -19,7 +18,6 @@ from .models import (
     HealthResponse,
     InteractionResponse,
     MetricsResponse,
-    PreviewResponse,
     QueryRequest,
     QueryResponse,
 )
@@ -158,43 +156,4 @@ async def interaction(
         clinical_advice=item["clinical_advice"],
         monitoring=item["monitoring"],
         source=item["source"],
-    )
-
-
-@app.post("/api/v1/documents/preview", response_model=PreviewResponse, tags=["documents"])
-async def preview_document(
-    file: UploadFile = File(...),  # noqa: B008
-    _: None = Depends(_require_api_key),
-) -> PreviewResponse:
-    filename = file.filename or "uploaded-document"
-    payload = await file.read()
-    suffix = Path(filename).suffix.lower()
-    warnings: list[str] = []
-    page_count: int | None = None
-    if suffix == ".pdf":
-        try:
-            import pymupdf
-
-            document = pymupdf.open(stream=payload, filetype="pdf")
-            page_count = document.page_count
-            text = "\n\n".join(page.get_text("text").strip() for page in document)
-            document.close()
-            doc_type = "PDF医学文档"
-        except Exception as exc:  # pragma: no cover - depends on malformed uploads
-            raise HTTPException(status_code=400, detail=f"PDF解析失败: {exc}") from exc
-    elif suffix in {".md", ".markdown", ".txt"}:
-        text = payload.decode("utf-8", errors="replace")
-        doc_type = "Markdown医学文档" if suffix != ".txt" else "文本医学文档"
-    else:
-        raise HTTPException(status_code=415, detail="仅支持 PDF、Markdown 和 TXT 预览")
-    sections = [line.lstrip("# ").strip() for line in text.splitlines() if line.startswith("#")]
-    if not text.strip():
-        warnings.append("文档没有提取到可检索文本，可能需要 OCR。")
-    return PreviewResponse(
-        filename=filename,
-        doc_type=doc_type,
-        page_count=page_count,
-        extracted_text=text[:20000],
-        sections=sections[:50],
-        warnings=warnings,
     )

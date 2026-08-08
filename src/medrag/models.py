@@ -100,15 +100,6 @@ class HealthResponse(BaseModel):
     chunks: int
 
 
-class PreviewResponse(BaseModel):
-    filename: str
-    doc_type: str
-    page_count: int | None = None
-    extracted_text: str
-    sections: list[str] = Field(default_factory=list)
-    warnings: list[str] = Field(default_factory=list)
-
-
 class InteractionResponse(BaseModel):
     found: bool
     drug_a: str

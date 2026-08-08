@@ -212,7 +212,7 @@ function TopBar({ activeView, onMenu, onEvidence, showEvidence }) {
   );
 }
 
-function Composer({ value, onChange, onSubmit, loading, onAttach }) {
+function Composer({ value, onChange, onSubmit, loading }) {
   const ref = useRef(null);
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -228,7 +228,6 @@ function Composer({ value, onChange, onSubmit, loading, onAttach }) {
       <div className="composer">
         <textarea ref={ref} value={value} onChange={(event) => onChange(event.target.value)} onKeyDown={handleKeyDown} placeholder="请输入您的医学问题…" rows={1} aria-label="医学问题输入框" />
         <div className="composer-toolbar">
-          <button className="composer-tool" onClick={onAttach} type="button"><Icon name="paperclip" size={17} />附件</button>
           <div className="composer-actions">
             <span className="composer-mode">循证回答 <Icon name="down" size={13} /></span>
             <button className="send-button" onClick={onSubmit} disabled={loading || !value.trim()} type="button"><Icon name="send" size={17} />{loading ? "检索中" : "发送"}</button>
@@ -463,7 +462,7 @@ export default function App() {
                   {error && <div className="error-notice"><Icon name="alert" size={16} />{error}</div>}
                 </div>
               </div>
-              <Composer value={question} onChange={setQuestion} onSubmit={() => submitQuestion()} loading={loading} onAttach={() => setError("文档预览入口将在下一步接入；当前支持 API 上传预览。")} />
+              <Composer value={question} onChange={setQuestion} onSubmit={() => submitQuestion()} loading={loading} />
             </main>
             {showEvidence && <EvidencePanel citations={citations} selectedCitation={selectedCitation} onClose={() => setShowEvidence(false)} onSelect={selectCitation} riskLevel={riskLevel} />}
           </div>
