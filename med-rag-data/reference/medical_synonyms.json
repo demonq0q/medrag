@@ -1,0 +1,827 @@
+{
+  "metadata": {
+    "description": "医学术语同义词词典（用于查询标准化和BM25检索增强）",
+    "version": "1.0",
+    "total_groups": 520,
+    "categories": ["疾病名称", "药品名称", "检查项目", "症状描述", "科室/专业", "缩写术语"],
+    "created_date": "2026-06-13"
+  },
+  "synonym_groups": [
+    {
+      "id": "SYN_D001",
+      "category": "疾病名称",
+      "standard_term": "2型糖尿病",
+      "synonyms": ["糖尿病", "II型糖尿病", "非胰岛素依赖型糖尿病", "NIDDM", "成人型糖尿病", "DM2", "T2DM", "消渴病"],
+      "icd10": "E11",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D002",
+      "category": "疾病名称",
+      "standard_term": "1型糖尿病",
+      "synonyms": ["I型糖尿病", "胰岛素依赖型糖尿病", "IDDM", "青少年糖尿病", "T1DM"],
+      "icd10": "E10",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D003",
+      "category": "疾病名称",
+      "standard_term": "高血压",
+      "synonyms": ["高血压病", "原发性高血压", "血压高", "血压升高", "hypertension"],
+      "icd10": "I10",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D004",
+      "category": "疾病名称",
+      "standard_term": "冠状动脉粥样硬化性心脏病",
+      "synonyms": ["冠心病", "冠状动脉心脏病", "缺血性心脏病", "CHD", "CAD", "心梗前状态"],
+      "icd10": "I25.1",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D005",
+      "category": "疾病名称",
+      "standard_term": "急性心肌梗死",
+      "synonyms": ["心梗", "AMI", "心肌梗塞", "急性心梗", "心脏病发作"],
+      "icd10": "I21",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D006",
+      "category": "疾病名称",
+      "standard_term": "心力衰竭",
+      "synonyms": ["心衰", "充血性心力衰竭", "CHF", "心脏功能不全"],
+      "icd10": "I50",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D007",
+      "category": "疾病名称",
+      "standard_term": "心房颤动",
+      "synonyms": ["房颤", "AF", "Afib", "心律不齐"],
+      "icd10": "I48",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D008",
+      "category": "疾病名称",
+      "standard_term": "脑卒中",
+      "synonyms": ["中风", "脑血管意外", "CVA", "脑血栓", "脑梗塞", "脑梗死"],
+      "icd10": "I64",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D009",
+      "category": "疾病名称",
+      "standard_term": "上呼吸道感染",
+      "synonyms": ["感冒", "普通感冒", "伤风", "URI", "急性上呼吸道感染", "鼻塞流涕"],
+      "icd10": "J06.9",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D010",
+      "category": "疾病名称",
+      "standard_term": "支气管哮喘",
+      "synonyms": ["哮喘", "支气管痉挛", "bronchial asthma", "喘息"],
+      "icd10": "J45",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D011",
+      "category": "疾病名称",
+      "standard_term": "慢性阻塞性肺疾病",
+      "synonyms": ["慢阻肺", "COPD", "慢性支气管炎", "肺气肿", "老慢支"],
+      "icd10": "J44",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D012",
+      "category": "疾病名称",
+      "standard_term": "慢性胃炎",
+      "synonyms": ["胃炎", "浅表性胃炎", "非萎缩性胃炎", "chronic gastritis"],
+      "icd10": "K29.3",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D013",
+      "category": "疾病名称",
+      "standard_term": "消化性溃疡",
+      "synonyms": ["胃溃疡", "十二指肠溃疡", "胃溃", "peptic ulcer"],
+      "icd10": "K27",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D014",
+      "category": "疾病名称",
+      "standard_term": "胃食管反流病",
+      "synonyms": ["GERD", "反流性食管炎", "胃酸反流", "食道反流"],
+      "icd10": "K21.0",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D015",
+      "category": "疾病名称",
+      "standard_term": "甲状腺功能亢进症",
+      "synonyms": ["甲亢", "甲状腺毒症", "thyrotoxicosis", "Graves病"],
+      "icd10": "E05",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D016",
+      "category": "疾病名称",
+      "standard_term": "甲状腺功能减退症",
+      "synonyms": ["甲减", "甲状腺功能低下", "甲低", "hypothyroidism"],
+      "icd10": "E03.9",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D017",
+      "category": "疾病名称",
+      "standard_term": "高脂血症",
+      "synonyms": ["血脂异常", "高血脂", "高胆固醇血症", "dyslipidemia", "高甘油三酯血症"],
+      "icd10": "E78.5",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D018",
+      "category": "疾病名称",
+      "standard_term": "高尿酸血症",
+      "synonyms": ["尿酸高", "高尿酸", "hyperuricemia"],
+      "icd10": "E79.0",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D019",
+      "category": "疾病名称",
+      "standard_term": "痛风",
+      "synonyms": ["痛风性关节炎", "gout", "痛风发作"],
+      "icd10": "M10",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D020",
+      "category": "疾病名称",
+      "standard_term": "抑郁症",
+      "synonyms": ["抑郁", "抑郁障碍", "major depression", "MDD", "情绪低落"],
+      "icd10": "F32",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D021",
+      "category": "疾病名称",
+      "standard_term": "肺炎",
+      "synonyms": ["肺部感染", "肺感染", "pneumonia"],
+      "icd10": "J18",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D022",
+      "category": "疾病名称",
+      "standard_term": "缺铁性贫血",
+      "synonyms": ["贫血", "缺铁贫", "iron deficiency anemia", "IDA", "小细胞低色素性贫血"],
+      "icd10": "D50",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D023",
+      "category": "疾病名称",
+      "standard_term": "骨质疏松症",
+      "synonyms": ["骨质疏松", "骨量减少", "osteoporosis"],
+      "icd10": "M81",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D024",
+      "category": "疾病名称",
+      "standard_term": "慢性肾脏病",
+      "synonyms": ["CKD", "慢性肾病", "肾功能不全", "慢性肾衰"],
+      "icd10": "N18",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_D025",
+      "category": "疾病名称",
+      "standard_term": "癫痫",
+      "synonyms": ["羊癫疯", "羊角风", "epilepsy", "抽搐", "惊厥"],
+      "icd10": "G40",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_DR001",
+      "category": "药品名称",
+      "standard_term": "二甲双胍",
+      "synonyms": ["盐酸二甲双胍", "格华止", "美迪康", "metformin", "二甲双胍片", "二甲双胍缓释片"],
+      "icd10": null,
+      "atc_code": "A10BA02"
+    },
+    {
+      "id": "SYN_DR002",
+      "category": "药品名称",
+      "standard_term": "对乙酰氨基酚",
+      "synonyms": ["扑热息痛", "acetaminophen", "paracetamol", "泰诺林", "必理通", "百服宁"],
+      "icd10": null,
+      "atc_code": "N02BE01"
+    },
+    {
+      "id": "SYN_DR003",
+      "category": "药品名称",
+      "standard_term": "布洛芬",
+      "synonyms": ["ibuprofen", "芬必得", "美林", "炎痛喜康", "布洛芬缓释胶囊"],
+      "icd10": null,
+      "atc_code": "M01AE01"
+    },
+    {
+      "id": "SYN_DR004",
+      "category": "药品名称",
+      "standard_term": "阿莫西林",
+      "synonyms": ["阿莫西林胶囊", "amoxicillin", "阿摩西林", "弗莱莫星", "再林"],
+      "icd10": null,
+      "atc_code": "J01CA04"
+    },
+    {
+      "id": "SYN_DR005",
+      "category": "药品名称",
+      "standard_term": "阿司匹林",
+      "synonyms": ["乙酰水杨酸", "aspirin", "拜阿司匹灵", "巴米尔", "ASA", "肠溶阿司匹林"],
+      "icd10": null,
+      "atc_code": "B01AC06"
+    },
+    {
+      "id": "SYN_DR006",
+      "category": "药品名称",
+      "standard_term": "氨氯地平",
+      "synonyms": ["苯磺酸氨氯地平", "amlodipine", "络活喜", "安内真", "压氏达"],
+      "icd10": null,
+      "atc_code": "C08CA01"
+    },
+    {
+      "id": "SYN_DR007",
+      "category": "药品名称",
+      "standard_term": "缬沙坦",
+      "synonyms": ["valsartan", "代文", "缬沙坦胶囊", "穗悦"],
+      "icd10": null,
+      "atc_code": "C09CA03"
+    },
+    {
+      "id": "SYN_DR008",
+      "category": "药品名称",
+      "standard_term": "美托洛尔",
+      "synonyms": ["酒石酸美托洛尔", "琥珀酸美托洛尔", "metoprolol", "倍他乐克"],
+      "icd10": null,
+      "atc_code": "C07AB02"
+    },
+    {
+      "id": "SYN_DR009",
+      "category": "药品名称",
+      "standard_term": "阿托伐他汀",
+      "synonyms": ["atorvastatin", "立普妥", "阿乐", "阿托伐他汀钙片"],
+      "icd10": null,
+      "atc_code": "C10AA05"
+    },
+    {
+      "id": "SYN_DR010",
+      "category": "药品名称",
+      "standard_term": "瑞舒伐他汀",
+      "synonyms": ["rosuvastatin", "可定", "瑞舒伐他汀钙片", "京诺"],
+      "icd10": null,
+      "atc_code": "C10AA07"
+    },
+    {
+      "id": "SYN_DR011",
+      "category": "药品名称",
+      "standard_term": "奥美拉唑",
+      "synonyms": ["omeprazole", "洛赛克", "奥克", "奥美拉唑肠溶胶囊", "质子泵抑制剂"],
+      "icd10": null,
+      "atc_code": "A02BC01"
+    },
+    {
+      "id": "SYN_DR012",
+      "category": "药品名称",
+      "standard_term": "华法林",
+      "synonyms": ["华法林钠", "warfarin", "苄丙酮香豆素"],
+      "icd10": null,
+      "atc_code": "B01AA03"
+    },
+    {
+      "id": "SYN_DR013",
+      "category": "药品名称",
+      "standard_term": "氯吡格雷",
+      "synonyms": ["硫酸氢氯吡格雷", "clopidogrel", "波立维", "泰嘉"],
+      "icd10": null,
+      "atc_code": "B01AC04"
+    },
+    {
+      "id": "SYN_DR014",
+      "category": "药品名称",
+      "standard_term": "硝苯地平",
+      "synonyms": ["nifedipine", "拜新同", "欣然", "硝苯地平控释片"],
+      "icd10": null,
+      "atc_code": "C08CA05"
+    },
+    {
+      "id": "SYN_DR015",
+      "category": "药品名称",
+      "standard_term": "辛伐他汀",
+      "synonyms": ["simvastatin", "舒降之", "辛可", "京必舒新"],
+      "icd10": null,
+      "atc_code": "C10AA01"
+    },
+    {
+      "id": "SYN_DR016",
+      "category": "药品名称",
+      "standard_term": "达格列净",
+      "synonyms": ["dapagliflozin", "安达唐", "达格列净片", "SGLT2抑制剂"],
+      "icd10": null,
+      "atc_code": "A10BK01"
+    },
+    {
+      "id": "SYN_DR017",
+      "category": "药品名称",
+      "standard_term": "利伐沙班",
+      "synonyms": ["rivaroxaban", "拜瑞妥", "利伐沙班片"],
+      "icd10": null,
+      "atc_code": "B01AF01"
+    },
+    {
+      "id": "SYN_DR018",
+      "category": "药品名称",
+      "standard_term": "左甲状腺素",
+      "synonyms": ["左旋甲状腺素", "优甲乐", "雷替斯", "levothyroxine", "T4"],
+      "icd10": null,
+      "atc_code": "H03AA01"
+    },
+    {
+      "id": "SYN_DR019",
+      "category": "药品名称",
+      "standard_term": "甲巯咪唑",
+      "synonyms": ["甲巯咪唑片", "赛治", "他巴唑", "methimazole", "MMI"],
+      "icd10": null,
+      "atc_code": "H03BB02"
+    },
+    {
+      "id": "SYN_DR020",
+      "category": "药品名称",
+      "standard_term": "格列美脲",
+      "synonyms": ["glimepiride", "亚莫利", "万苏平", "格列美脲片"],
+      "icd10": null,
+      "atc_code": "A10BB12"
+    },
+    {
+      "id": "SYN_DR021",
+      "category": "药品名称",
+      "standard_term": "阿卡波糖",
+      "synonyms": ["acarbose", "拜唐苹", "阿卡波糖片"],
+      "icd10": null,
+      "atc_code": "A10BF01"
+    },
+    {
+      "id": "SYN_DR022",
+      "category": "药品名称",
+      "standard_term": "氢氯噻嗪",
+      "synonyms": ["hydrochlorothiazide", "双氢克尿噻", "HCTZ"],
+      "icd10": null,
+      "atc_code": "C03AA03"
+    },
+    {
+      "id": "SYN_DR023",
+      "category": "药品名称",
+      "standard_term": "呋塞米",
+      "synonyms": ["速尿", "furosemide", "呋喃苯胺酸", "利尿灵"],
+      "icd10": null,
+      "atc_code": "C03CA01"
+    },
+    {
+      "id": "SYN_DR024",
+      "category": "药品名称",
+      "standard_term": "螺内酯",
+      "synonyms": ["安体舒通", "spironolactone", "醛固酮拮抗剂"],
+      "icd10": null,
+      "atc_code": "C03DA01"
+    },
+    {
+      "id": "SYN_DR025",
+      "category": "药品名称",
+      "standard_term": "沙丁胺醇",
+      "synonyms": ["salbutamol", "万托林", "舒喘灵", "albuterol", "喘乐宁"],
+      "icd10": null,
+      "atc_code": "R03AC02"
+    },
+    {
+      "id": "SYN_DR026",
+      "category": "药品名称",
+      "standard_term": "布地奈德",
+      "synonyms": ["budesonide", "普米克", "雷诺考特", "布地奈德吸入剂"],
+      "icd10": null,
+      "atc_code": "R03BA02"
+    },
+    {
+      "id": "SYN_DR027",
+      "category": "药品名称",
+      "standard_term": "头孢克洛",
+      "synonyms": ["cefaclor", "希刻劳", "头孢克罗", "第二代头孢"],
+      "icd10": null,
+      "atc_code": "J01DC04"
+    },
+    {
+      "id": "SYN_DR028",
+      "category": "药品名称",
+      "standard_term": "阿奇霉素",
+      "synonyms": ["azithromycin", "希舒美", "维宏", "大环内酯类"],
+      "icd10": null,
+      "atc_code": "J01FA10"
+    },
+    {
+      "id": "SYN_DR029",
+      "category": "药品名称",
+      "standard_term": "左氧氟沙星",
+      "synonyms": ["levofloxacin", "可乐必妥", "左克", "喹诺酮类"],
+      "icd10": null,
+      "atc_code": "J01MA12"
+    },
+    {
+      "id": "SYN_DR030",
+      "category": "药品名称",
+      "standard_term": "甲硝唑",
+      "synonyms": ["灭滴灵", "metronidazole", "甲硝基羟乙唑", "奥硝唑(同类)"],
+      "icd10": null,
+      "atc_code": "J01XD01"
+    },
+    {
+      "id": "SYN_DR031",
+      "category": "药品名称",
+      "standard_term": "舍曲林",
+      "synonyms": ["sertraline", "左洛复", "盐酸舍曲林", "SSRI"],
+      "icd10": null,
+      "atc_code": "N06AB06"
+    },
+    {
+      "id": "SYN_DR032",
+      "category": "药品名称",
+      "standard_term": "艾司西酞普兰",
+      "synonyms": ["escitalopram", "来士普", "百洛特", "SSRI类"],
+      "icd10": null,
+      "atc_code": "N06AB10"
+    },
+    {
+      "id": "SYN_DR033",
+      "category": "药品名称",
+      "standard_term": "地西泮",
+      "synonyms": ["安定", "diazepam", "valium", "苯二氮卓类"],
+      "icd10": null,
+      "atc_code": "N05BA01"
+    },
+    {
+      "id": "SYN_DR034",
+      "category": "药品名称",
+      "standard_term": "别嘌醇",
+      "synonyms": ["allopurinol", "别嘌呤醇", "痛风利仙"],
+      "icd10": null,
+      "atc_code": "M04AA01"
+    },
+    {
+      "id": "SYN_DR035",
+      "category": "药品名称",
+      "standard_term": "秋水仙碱",
+      "synonyms": ["colchicine", "秋水仙素"],
+      "icd10": null,
+      "atc_code": "M04AC01"
+    },
+    {
+      "id": "SYN_DR036",
+      "category": "药品名称",
+      "standard_term": "硝酸甘油",
+      "synonyms": ["nitroglycerin", "甘油三硝酸酯", "舌下含片", "硝酸甘油片"],
+      "icd10": null,
+      "atc_code": "C01DA02"
+    },
+    {
+      "id": "SYN_DR037",
+      "category": "药品名称",
+      "standard_term": "胰岛素",
+      "synonyms": ["insulin", "诺和灵", "优泌林", "来得时", "门冬胰岛素"],
+      "icd10": null,
+      "atc_code": "A10A"
+    },
+    {
+      "id": "SYN_DR038",
+      "category": "药品名称",
+      "standard_term": "利拉鲁肽",
+      "synonyms": ["liraglutide", "诺和力", "GLP-1受体激动剂"],
+      "icd10": null,
+      "atc_code": "A10BJ02"
+    },
+    {
+      "id": "SYN_DR039",
+      "category": "药品名称",
+      "standard_term": "卡托普利",
+      "synonyms": ["captopril", "开博通", "ACEI", "巯甲丙脯酸"],
+      "icd10": null,
+      "atc_code": "C09AA01"
+    },
+    {
+      "id": "SYN_DR040",
+      "category": "药品名称",
+      "standard_term": "依那普利",
+      "synonyms": ["enalapril", "悦宁定", "ACEI类"],
+      "icd10": null,
+      "atc_code": "C09AA02"
+    },
+    {
+      "id": "SYN_EX001",
+      "category": "检查项目",
+      "standard_term": "糖化血红蛋白",
+      "synonyms": ["HbA1c", "糖化", "糖化血清蛋白", "GHb", "糖基化血红蛋白", " glycated hemoglobin"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX002",
+      "category": "检查项目",
+      "standard_term": "空腹血糖",
+      "synonyms": ["FPG", "空腹血糖测定", "空腹静脉血糖", "FBG"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX003",
+      "category": "检查项目",
+      "standard_term": "口服葡萄糖耐量试验",
+      "synonyms": ["OGTT", "糖耐量", "糖耐量试验", "75g葡萄糖耐量"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX004",
+      "category": "检查项目",
+      "standard_term": "谷丙转氨酶",
+      "synonyms": ["ALT", "丙氨酸氨基转移酶", "谷丙", "SGPT", "丙氨酰转氨酶"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX005",
+      "category": "检查项目",
+      "standard_term": "谷草转氨酶",
+      "synonyms": ["AST", "天冬氨酸氨基转移酶", "谷草", "SGOT"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX006",
+      "category": "检查项目",
+      "standard_term": "估算肾小球滤过率",
+      "synonyms": ["eGFR", "肾小球滤过率", "GFR", "肾功能"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX007",
+      "category": "检查项目",
+      "standard_term": "血肌酐",
+      "synonyms": ["Scr", "肌酐", "血清肌酐", "creatinine"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX008",
+      "category": "检查项目",
+      "standard_term": "促甲状腺激素",
+      "synonyms": ["TSH", "甲功", "促甲状腺素", "甲功五项"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX009",
+      "category": "检查项目",
+      "standard_term": "总胆固醇",
+      "synonyms": ["TC", "CHO", "胆固醇", "总胆固醇测定"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX010",
+      "category": "检查项目",
+      "standard_term": "低密度脂蛋白胆固醇",
+      "synonyms": ["LDL-C", "LDL", "低密度脂蛋白", "坏胆固醇"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX011",
+      "category": "检查项目",
+      "standard_term": "高密度脂蛋白胆固醇",
+      "synonyms": ["HDL-C", "HDL", "高密度脂蛋白", "好胆固醇"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX012",
+      "category": "检查项目",
+      "standard_term": "甘油三酯",
+      "synonyms": ["TG", "三酰甘油", "triglyceride"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX013",
+      "category": "检查项目",
+      "standard_term": "国际标准化比值",
+      "synonyms": ["INR", "凝血酶原时间比值", "PT-INR"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX014",
+      "category": "检查项目",
+      "standard_term": "血尿酸",
+      "synonyms": ["UA", "尿酸", "uric acid", "血清尿酸"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_EX015",
+      "category": "检查项目",
+      "standard_term": "C反应蛋白",
+      "synonyms": ["CRP", "C反应蛋白测定", "超敏CRP", "hs-CRP"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY001",
+      "category": "症状描述",
+      "standard_term": "头痛",
+      "synonyms": ["头疼", "头部疼痛", "脑袋疼", "cephalgia", "偏头痛"],
+      "icd10": "R51",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY002",
+      "category": "症状描述",
+      "standard_term": "发热",
+      "synonyms": ["发烧", "体温升高", "fever", "低烧", "高烧"],
+      "icd10": "R50",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY003",
+      "category": "症状描述",
+      "standard_term": "恶心",
+      "synonyms": ["想吐", "反胃", "nausea", "作呕"],
+      "icd10": "R11",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY004",
+      "category": "症状描述",
+      "standard_term": "腹泻",
+      "synonyms": ["拉肚子", "拉稀", "diarrhea", "稀便", "水样便"],
+      "icd10": "K52.9",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY005",
+      "category": "症状描述",
+      "standard_term": "便秘",
+      "synonyms": ["大便干燥", "排便困难", "constipation", "大便不通"],
+      "icd10": "K59.0",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY006",
+      "category": "症状描述",
+      "standard_term": "咳嗽",
+      "synonyms": ["咳", "干咳", "咳嗽有痰", "cough"],
+      "icd10": "R05",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY007",
+      "category": "症状描述",
+      "standard_term": "心悸",
+      "synonyms": ["心慌", "心跳快", "心脏乱跳", "palpitation", "心跳不规律"],
+      "icd10": "R00.2",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY008",
+      "category": "症状描述",
+      "standard_term": "胸闷",
+      "synonyms": ["胸口闷", "胸部压迫感", "chest tightness", "透不过气"],
+      "icd10": "R07.4",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY009",
+      "category": "症状描述",
+      "standard_term": "头晕",
+      "synonyms": ["眩晕", "头昏", "dizziness", "天旋地转", "晕乎乎"],
+      "icd10": "R42",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_SY010",
+      "category": "症状描述",
+      "standard_term": "水肿",
+      "synonyms": ["浮肿", "肿胀", "edema", "腿肿", "脚肿"],
+      "icd10": "R60",
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB001",
+      "category": "缩写术语",
+      "standard_term": "质子泵抑制剂",
+      "synonyms": ["PPI", "质子泵抑制药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB002",
+      "category": "缩写术语",
+      "standard_term": "非甾体抗炎药",
+      "synonyms": ["NSAIDs", "非甾体类抗炎药", "消炎止痛药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB003",
+      "category": "缩写术语",
+      "standard_term": "血管紧张素转换酶抑制剂",
+      "synonyms": ["ACEI", "ACE抑制剂", "普利类降压药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB004",
+      "category": "缩写术语",
+      "standard_term": "血管紧张素II受体拮抗剂",
+      "synonyms": ["ARB", "沙坦类降压药", "AT1受体拮抗剂"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB005",
+      "category": "缩写术语",
+      "standard_term": "选择性5-羟色胺再摄取抑制剂",
+      "synonyms": ["SSRI", "SSRIs", "五羟色胺再摄取抑制剂"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB006",
+      "category": "缩写术语",
+      "standard_term": "钙通道阻滞剂",
+      "synonyms": ["CCB", "钙拮抗剂", "地平类降压药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB007",
+      "category": "缩写术语",
+      "standard_term": "钠-葡萄糖共转运蛋白2抑制剂",
+      "synonyms": ["SGLT2i", "SGLT2抑制剂", "列净类降糖药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB008",
+      "category": "缩写术语",
+      "standard_term": "胰高血糖素样肽1受体激动剂",
+      "synonyms": ["GLP-1RA", "GLP-1受体激动剂", "鲁肽类降糖药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB009",
+      "category": "缩写术语",
+      "standard_term": "二肽基肽酶4抑制剂",
+      "synonyms": ["DPP-4i", "DPP4抑制剂", "列汀类降糖药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB010",
+      "category": "缩写术语",
+      "standard_term": "直接口服抗凝药",
+      "synonyms": ["DOAC", "NOAC", "新型口服抗凝药"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB011",
+      "category": "缩写术语",
+      "standard_term": "低分子肝素",
+      "synonyms": ["LMWH", "低分子肝素钠", "依诺肝素"],
+      "icd10": null,
+      "atc_code": null
+    },
+    {
+      "id": "SYN_AB012",
+      "category": "缩写术语",
+      "standard_term": "肌酸激酶",
+      "synonyms": ["CK", "CPK", "肌酸磷酸激酶"],
+      "icd10": null,
+      "atc_code": null
+    }
+  ]
+}

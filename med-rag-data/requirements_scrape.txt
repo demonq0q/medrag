@@ -1,0 +1,11 @@
+# 爬虫依赖包
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+markdownify>=0.11.0
+html2text>=2024.2.26
+
+# PDF 处理（可选，用于解析已下载的 PDF）
+pdfplumber>=0.10.0
+
+# 可选：代理支持（如果某些网站需要代理访问）
+# pysocks>=1.7.1
