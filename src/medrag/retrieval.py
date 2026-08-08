@@ -95,6 +95,22 @@ class HybridRetriever:
             reverse=True,
         )
         ranked = self._deduplicate_sources(ranked)[:top_k]
+        if interactions:
+            interaction_ids = {item["chunk_id"] for item in interactions}
+            ranked.sort(
+                key=lambda result: (
+                    0 if result.chunk.chunk_id in interaction_ids else 1,
+                    -result.score,
+                )
+            )
+        elif labs:
+            lab_ids = {item["chunk_id"] for item in labs}
+            ranked.sort(
+                key=lambda result: (
+                    0 if result.chunk.chunk_id in lab_ids else 1,
+                    -result.score,
+                )
+            )
         trace = {
             "terms": terms[:32],
             "routes": {
