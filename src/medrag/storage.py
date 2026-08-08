@@ -349,6 +349,7 @@ class SQLiteStore:
             return []
         fts_query = " OR ".join(f'"{term}"' for term in terms)
         type_clause = " AND c.doc_type = ?" if doc_type else ""
+        fallback_type_clause = " AND doc_type = ?" if doc_type else ""
         params: list[Any] = [fts_query]
         if doc_type:
             params.append(doc_type)
@@ -376,7 +377,7 @@ class SQLiteStore:
 
         with self.connect() as connection:
             rows = connection.execute(
-                f"SELECT * FROM chunks WHERE is_parent = 0 {type_clause}",
+                f"SELECT * FROM chunks WHERE is_parent = 0 {fallback_type_clause}",
                 params[1:-1] if doc_type else [],
             ).fetchall()
         scored: list[tuple[ChunkRecord, float]] = []
