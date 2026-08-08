@@ -2,12 +2,49 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "./icons";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "/api";
+const LOCAL_HISTORY_KEY = "medrag:xiaohe:conversation-history:v1";
+const MAX_LOCAL_CONVERSATIONS = 30;
 
 const suggestions = [
   { title: "药物相互作用", text: "华法林和阿司匹林能否同时服用" },
   { title: "检查指标解读", text: "糖化血红蛋白的参考范围和影响因素是什么" },
   { title: "循证问答", text: "2型糖尿病合并肾功能异常如何评估用药" },
 ];
+
+function readLocalConversations() {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(LOCAL_HISTORY_KEY);
+    if (!raw) return [];
+    const payload = JSON.parse(raw);
+    const records = Array.isArray(payload) ? payload : payload?.version === 1 ? payload.conversations : [];
+    if (!Array.isArray(records)) return [];
+    return records
+      .filter((item) => item && typeof item.conversation_id === "string" && Array.isArray(item.messages))
+      .slice(0, MAX_LOCAL_CONVERSATIONS);
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalConversations(conversations) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(LOCAL_HISTORY_KEY, JSON.stringify({ version: 1, conversations }));
+  } catch {
+    // Storage can be disabled or full; the current conversation still works in memory.
+  }
+}
+
+function upsertLocalConversation(current, conversation) {
+  const existing = current.find((item) => item.conversation_id === conversation.conversation_id);
+  const record = {
+    ...existing,
+    ...conversation,
+    title: existing?.title || conversation.title,
+  };
+  return [record, ...current.filter((item) => item.conversation_id !== record.conversation_id)].slice(0, MAX_LOCAL_CONVERSATIONS);
+}
 
 function BrandMark() {
   return (
@@ -50,7 +87,7 @@ function AnswerText({ text, onCitation }) {
   );
 }
 
-function Sidebar({ collapsed, mobileOpen, activeView, onNavigate, onNewChat, conversations, onToggle }) {
+function Sidebar({ collapsed, mobileOpen, activeView, onNavigate, onNewChat, onOpenConversation, conversations, onToggle }) {
   const primary = [
     ["chat", "问答", "message"],
     ["knowledge", "知识库", "book"],
@@ -89,7 +126,7 @@ function Sidebar({ collapsed, mobileOpen, activeView, onNavigate, onNewChat, con
           {conversations.length === 0 ? (
             <div className="empty-history">完成一次问答后，对话会显示在这里</div>
           ) : conversations.slice(0, 8).map((conversation) => (
-            <button className="history-item" key={conversation.conversation_id} type="button" title={conversation.title}>
+            <button className="history-item" key={conversation.conversation_id} onClick={() => onOpenConversation(conversation)} type="button" title={conversation.title}>
               <span>{conversation.title}</span><time>{formatTime(conversation.updated_at)}</time>
             </button>
           ))}
@@ -237,22 +274,22 @@ export default function App() {
   const [citations, setCitations] = useState([]);
   const [riskLevel, setRiskLevel] = useState("low");
   const [conversationId, setConversationId] = useState(null);
-  const [conversations, setConversations] = useState([]);
+  const [conversations, setConversations] = useState(() => readLocalConversations());
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const loadData = useCallback(async () => {
     try {
-      const [metricsResponse, conversationsResponse] = await Promise.all([fetch(`${API_BASE}/v1/metrics`), fetch(`${API_BASE}/v1/conversations`)]);
+      const metricsResponse = await fetch(`${API_BASE}/v1/metrics`);
       if (metricsResponse.ok) setMetrics(await metricsResponse.json());
-      if (conversationsResponse.ok) setConversations(await conversationsResponse.json());
     } catch {
       setError("暂时无法连接知识库服务，请确认 API 已启动。");
     }
   }, []);
 
   useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => { writeLocalConversations(conversations); }, [conversations]);
 
   const submitQuestion = useCallback(async (value = question) => {
     const text = value.trim();
@@ -269,8 +306,20 @@ export default function App() {
       setConversationId(data.conversation_id);
       setCitations(data.citations || []);
       setRiskLevel(data.risk_level || "low");
-      setMessages((current) => [...current, { role: "assistant", content: data.answer, meta: data }]);
-      setConversations((current) => [{ conversation_id: data.conversation_id, title: text.slice(0, 40), updated_at: new Date().toISOString() }, ...current.filter((item) => item.conversation_id !== data.conversation_id)]);
+      const assistantMessage = { role: "assistant", content: data.answer, meta: data };
+      const userMessage = { role: "user", content: text };
+      setMessages((current) => [...current, assistantMessage]);
+      setConversations((current) => {
+        const previous = current.find((item) => item.conversation_id === data.conversation_id);
+        return upsertLocalConversation(current, {
+          conversation_id: data.conversation_id,
+          title: text.slice(0, 40),
+          updated_at: new Date().toISOString(),
+          messages: [...(previous?.messages || []), userMessage, assistantMessage],
+          citations: data.citations || [],
+          risk_level: data.risk_level || "low",
+        });
+      });
     } catch {
       setError("问答服务暂时不可用，请稍后重试。");
     } finally {
@@ -278,14 +327,28 @@ export default function App() {
     }
   }, [conversationId, loading, question]);
 
-  const newChat = () => { setMessages([]); setCitations([]); setRiskLevel("low"); setConversationId(null); setQuestion(""); setError(""); setActiveView("chat"); setMobileOpen(false); };
+  const openConversation = useCallback((conversation) => {
+    const restoredMessages = Array.isArray(conversation.messages) ? conversation.messages : [];
+    const lastAssistant = [...restoredMessages].reverse().find((message) => message.role === "assistant");
+    setMessages(restoredMessages);
+    setCitations(conversation.citations || lastAssistant?.meta?.citations || []);
+    setRiskLevel(conversation.risk_level || lastAssistant?.meta?.risk_level || "low");
+    setConversationId(conversation.conversation_id);
+    setQuestion("");
+    setError("");
+    setSelectedCitation(null);
+    setActiveView("chat");
+    setMobileOpen(false);
+  }, []);
+
+  const newChat = () => { setMessages([]); setCitations([]); setRiskLevel("low"); setConversationId(null); setQuestion(""); setError(""); setSelectedCitation(null); setActiveView("chat"); setMobileOpen(false); };
   const navigate = (view) => { setActiveView(view); setMobileOpen(false); };
   const activeCitationText = useMemo(() => citations.find((item) => item.citation_id === selectedCitation)?.snippet, [citations, selectedCitation]);
 
   return (
     <div className="app-shell">
       {mobileOpen && <button className="mobile-overlay" onClick={() => setMobileOpen(false)} aria-label="关闭导航" type="button" />}
-      <Sidebar collapsed={collapsed} mobileOpen={mobileOpen} activeView={activeView} onNavigate={navigate} onNewChat={newChat} conversations={conversations} onToggle={() => setCollapsed((value) => !value)} />
+      <Sidebar collapsed={collapsed} mobileOpen={mobileOpen} activeView={activeView} onNavigate={navigate} onNewChat={newChat} onOpenConversation={openConversation} conversations={conversations} onToggle={() => setCollapsed((value) => !value)} />
       <div className="main-stage">
         <TopBar activeView={activeView} onMenu={() => setMobileOpen(true)} onEvidence={() => setShowEvidence((value) => !value)} showEvidence={showEvidence} />
         {activeView === "knowledge" ? <KnowledgeView metrics={metrics} onRefresh={loadData} /> : activeView === "evaluation" ? <EvaluationView metrics={metrics} /> : (
