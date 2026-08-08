@@ -435,15 +435,22 @@ export default function App() {
   useEffect(() => {
     if (!selectedCitation) return undefined;
     const dismiss = () => closeCitation();
+    const isInsidePopover = (event) => {
+      const target = event.target;
+      return target instanceof Element && Boolean(target.closest(".citation-popover"));
+    };
+    const dismissOutsidePopover = (event) => {
+      if (!isInsidePopover(event)) dismiss();
+    };
     const passive = { passive: true };
-    document.addEventListener("scroll", dismiss, true);
-    window.addEventListener("wheel", dismiss, passive);
-    window.addEventListener("touchmove", dismiss, passive);
+    document.addEventListener("scroll", dismissOutsidePopover, true);
+    window.addEventListener("wheel", dismissOutsidePopover, passive);
+    window.addEventListener("touchmove", dismissOutsidePopover, passive);
     window.addEventListener("resize", dismiss, passive);
     return () => {
-      document.removeEventListener("scroll", dismiss, true);
-      window.removeEventListener("wheel", dismiss, passive);
-      window.removeEventListener("touchmove", dismiss, passive);
+      document.removeEventListener("scroll", dismissOutsidePopover, true);
+      window.removeEventListener("wheel", dismissOutsidePopover, passive);
+      window.removeEventListener("touchmove", dismissOutsidePopover, passive);
       window.removeEventListener("resize", dismiss, passive);
     };
   }, [closeCitation, selectedCitation]);
