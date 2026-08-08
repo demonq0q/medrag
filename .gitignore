@@ -10,6 +10,10 @@ venv/
 env/
 ENV/
 
+# Node dependencies and local frontend tooling
+node_modules/
+.vite/
+
 # Packaging and build output
 build/
 dist/
